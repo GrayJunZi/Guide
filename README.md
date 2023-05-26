@@ -16,9 +16,45 @@ ASP.NET Core、Nuxt.js、CI/CD
 
 ### 技术栈是什么？
 
-- ASP.NET Core (MediatR, EF Core)
+- ASP.NET Core
+  - MediatR - cqrs 命令与查询分离
+  - EF Core - ORM框架
+  - ImageSharp - 图片处理
+  - Xabe.FFmpeg - 视频处理
 - Vue.js/Nuxt.js
+  - Server Side Rendering - 服务端渲染
+  - Client Side Rendering - 客户端渲染
 - PostgreSQL
-- Postman
+- 开发工具
+  - Postman
 - Git/Github/Github Actions
+  - 版本控制
+  - CI/CD
 - Nginx
+
+## 二、项目设置
+
+### 创建 `TrackingLibrary.Api` 项目。
+
+```bash
+dotnet new sln -n "TrackingLibrary"
+dotnet new webapi -n "TrackingLibrary.Api"
+dotnet sln add .\TrackingLibrary.Api
+```
+
+### 创建 `web-client` 项目。
+
+```bash
+npx create-nuxt-app web-client
+> Project name: web-client
+> Programming language: JavaScript
+> Package manager: Npm
+> UI framework: Vuetify.js
+> Template engine: HTML
+> Nuxt.js modules: (*) Axios
+> Linting tools: 
+> Testing framework: None
+> Rendering mode: Universal (SSR / SSG)
+> Deployment target: Server (Node.js hosting)
+> Development tools:
+```
