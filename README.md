@@ -62,3 +62,6 @@ npx create-nuxt-app web-client
 ## 三、Github Actions
 
 创建 `.github\workflows` 文件夹，并添加 `build.yaml` 文件，提交代码后将自动执行 `Github Action` 工作流。
+
+## 四、REST API 与 Vuex 交互
+
