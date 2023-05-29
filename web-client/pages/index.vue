@@ -1,29 +1,15 @@
 <template>
   <v-row justify="center" align="center">
     <v-col cols="12" sm="8" md="6">
-      <v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo/>
-        <VuetifyLogo/>
-      </v-card>
-      <v-card>
-        <v-card-title class="headline">
-          {{ message }}
-
-          <div v-if="tricks">
-            <p v-for="t in tricks">{{ t.name }}</p>
-          </div>
-
-
-        </v-card-title>
-        <v-card-actions>
-          <v-btn color="primary" @click="saveTrick">Save</v-btn>
-        </v-card-actions>
+      <v-card class="py-4 d-flex justify-center">
+        <v-file-input accept="video/*" @change="handleFileUpload"/>
       </v-card>
     </v-col>
   </v-row>
 </template>
 
 <script>
+import Axios from 'axios'
 import {mapState, mapActions, mapMutations} from 'vuex'
 
 export default {
@@ -44,6 +30,15 @@ export default {
     ...mapActions('tricks', ['createTrick']),
     async saveTrick() {
       await this.createTrick({trick: {name: `${+new Date()}`}})
+    },
+    async handleFileUpload(file) {
+      if (!file) return;
+
+      let form = new FormData()
+      form.append('video', file)
+console.log(file)
+      const result = await Axios.post('http://localhost:5186/api/videos', form)
+      console.log(result)
     }
   },
   async fetch() {
