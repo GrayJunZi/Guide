@@ -66,3 +66,6 @@ npx create-nuxt-app web-client
 ## 四、Vuex与API接口交互
 
 ## 五、视频上传
+
+## 六、简化视频上传(Streamline Video Uploads)
+
