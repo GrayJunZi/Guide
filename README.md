@@ -69,3 +69,4 @@ npx create-nuxt-app web-client
 
 ## 六、简化视频上传(Streamline Video Uploads)
 
+## 七、视频上传流程

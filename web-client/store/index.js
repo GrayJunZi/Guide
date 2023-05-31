@@ -11,7 +11,7 @@ export const mutations = {
 }
 
 export const actions = {
-  async fetchMessage({commit, dispatch}) {
+  async nuxtServerInit({commit, dispatch}) {
     await dispatch('tricks/fetchTricks')
   }
 }
