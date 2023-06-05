@@ -94,10 +94,10 @@ export default {
       const video = await this.uploadPromise
       await this.createTrick({
         trick: {
+          id:"",
           name: this.trickName,
         },
         submission: {
-          trickId: 1,
           video,
           description: this.submission,
         }

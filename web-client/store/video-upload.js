@@ -45,11 +45,8 @@ export const actions = {
     if (state.type === UPLOAD_TYPE.TRICK) {
       const createdTrick = await this.$axios.$post('/api/tricks', trick)
       submission.trickId = createdTrick.id
-
     }
 
-    const createSubmission = await this.$axios.$post('/api/submissions', submission)
-    await dispatch('tricks/fetchTricks', null, {root: true})
-    await dispatch('submissions/fetchSubmissions', null, {root: true})
+    await this.$axios.$post('/api/submissions', submission)
   }
 }

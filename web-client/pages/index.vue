@@ -3,16 +3,7 @@
 
     <div v-if="tricks">
       <div v-for="t in tricks">
-        {{ t.name }}
-      </div>
-    </div>
-
-    <div v-if="submissions">
-      <div v-for="s in submissions">
-        {{ s.name }}
-        <div>
-          <video :src="`http://localhost:5186/api/videos/${s.video}`" width="500" controls/>
-        </div>
+        <v-btn :to="`/tricks/${t.id}`">{{ t.name}}</v-btn>
       </div>
     </div>
 
@@ -31,6 +22,9 @@ export default {
   },
   components:{
     VideoUpload
+  },
+  async fetch(){
+    await this.$store.dispatch("tricks/fetchTricks");
   }
 }
 </script>

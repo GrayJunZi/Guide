@@ -14,8 +14,8 @@ export const mutations = {
 }
 
 export const actions = {
-  async fetchSubmissions({commit, dispatch}) {
-    const submissions = await this.$axios.$get("/api/submissions")
+  async fetchSubmissionsForTrick({commit},{trickId}) {
+    const submissions = await this.$axios.$get(`/api/tricks/${trickId}/submissions`)
     commit("setSubmissions", {submissions})
   }
 }
