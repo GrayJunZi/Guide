@@ -70,3 +70,5 @@ npx create-nuxt-app web-client
 ## 六、简化视频上传(Streamline Video Uploads)
 
 ## 七、视频上传流程
+
+## 八、使用EFCore并完善视频上传功能

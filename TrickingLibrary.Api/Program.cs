@@ -1,4 +1,5 @@
-using TrickingLibrary.Api.Models;
+using Microsoft.EntityFrameworkCore;
+using TrickingLibrary.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,7 +7,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<TrickyStore>();
+builder.Services.AddDbContext<AppDbContext>(options=>options.UseInMemoryDatabase("Dev"));
 
 builder.Services.AddCors(options=>options.AddPolicy("All",build=>build
     .AllowAnyHeader()

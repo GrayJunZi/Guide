@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TrickingLibrary.Api.Models;
+using Microsoft.EntityFrameworkCore;
+using TrickingLibrary.Data;
+using TrickingLibrary.Models;
 
 namespace TricikingLibrary.Api.Controllers;
 
@@ -7,23 +9,55 @@ namespace TricikingLibrary.Api.Controllers;
 [Route("api/[controller]")]
 public class TricksController : ControllerBase
 {
-    private readonly TrickyStore _store;
+    private readonly AppDbContext _ctx;
 
-    public TricksController(TrickyStore store)
+    public TricksController(AppDbContext ctx)
     {
-        _store = store;
+        _ctx = ctx;
     }
 
     [HttpGet]
-    public IActionResult All() => Ok(_store.All);
+    public async Task<IEnumerable<Trick>> All() => await _ctx.Tricks.ToListAsync();
 
     [HttpGet("{id}")]
-    public IActionResult Get(int id) => Ok(_store.All.FirstOrDefault(x => x.Id.Equals(id)));
+    public async Task<Trick> Get(int id) => await _ctx.Tricks.FirstOrDefaultAsync(x => x.Id.Equals(id));
+
+    [HttpGet("{trickId}/submission")]
+    public async Task<IEnumerable<Submission>> GetSubmissions(int trickId) =>
+        await _ctx.Submissions.Where(x => x.TrickId.Equals(trickId)).ToListAsync();
 
     [HttpPost]
-    public IActionResult Create([FromBody] Trick trick)
+    public async Task<Trick> Create([FromBody] Trick trick)
     {
-        _store.Add(trick);
+        _ctx.Add(trick);
+        await _ctx.SaveChangesAsync();
+        return trick;
+    }
+
+    [HttpPut]
+    public async Task<Trick> Update([FromBody] Trick trick)
+    {
+        if (trick.Id == 0)
+        {
+            return null;
+        }
+
+        _ctx.Update(trick);
+        await _ctx.SaveChangesAsync();
+        return trick;
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var trick = await _ctx.Tricks.FirstOrDefaultAsync(x=>x.Id.Equals(id));
+        if (trick == null)
+        {
+            return NotFound();
+        }
+        trick.Deleted = true;
+        _ctx.Update(trick);
+        await _ctx.SaveChangesAsync();
         return Ok();
     }
 }
