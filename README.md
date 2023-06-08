@@ -74,3 +74,5 @@ npx create-nuxt-app web-client
 ## 八、使用EFCore并完善视频上传功能
 
 ## 九、拆分单独的Trick页面
+
+## 十、组件拆分

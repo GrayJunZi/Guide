@@ -12,16 +12,12 @@
 
 <script>
 import {mapState} from 'vuex'
-import VideoUpload from '../components/video-upload.vue'
 
 export default {
   name: 'IndexPage',
   computed: {
     ...mapState('tricks', ['tricks']),
     ...mapState('submissions', ['submissions']),
-  },
-  components:{
-    VideoUpload
   },
   async fetch(){
     await this.$store.dispatch("tricks/fetchTricks");

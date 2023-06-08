@@ -5,7 +5,7 @@
 
       <v-spacer/>
 
-      <video-upload/>
+      <content-creation-dialog/>
     </v-app-bar>
     <v-main>
       <Nuxt/>
@@ -14,12 +14,12 @@
 </template>
 
 <script>
-import VideoUpload from '../components/video-upload.vue'
+import ContentCreationDialog from '../components/content-creation/content-createion-dialog.vue'
 
 export default {
   name: 'DefaultLayout',
   components: {
-    VideoUpload
+    ContentCreationDialog
   }
 }
 </script>

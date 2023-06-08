@@ -1,35 +1,21 @@
-﻿import {UPLOAD_TYPE} from '../data/enum'
-
-const initState = () => ({
+﻿const initState = () => ({
   uploadPromise: null,
   active: false,
-  type: "",
-  step: 1
+  component: null
 })
 
 export const state = initState
 
 export const mutations = {
-  toggleActivity(state) {
-    state.active = !state.active
-    if (!state.active) {
-      this.reset(state)
-    }
+  activate(state, {component}) {
+    state.active = true
+    state.component = component
   },
-  setType(state, {type}) {
-    state.type = type
-    if (type === UPLOAD_TYPE.TRICK) {
-      state.step++
-    } else if (type === UPLOAD_TYPE.SUBMISSION) {
-      state.step += 2;
-    }
-  },
-  incStep(state) {
-    state.step++
+  hide(state) {
+    state.active = false
   },
   setTask(state, {uploadPromise}) {
     state.uploadPromise = uploadPromise
-    state.step++
   },
   reset(state) {
     Object.assign(state, initState())
@@ -41,12 +27,12 @@ export const actions = {
     const uploadPromise = this.$axios.$post('/api/videos', form)
     commit("setTask", {uploadPromise})
   },
-  async createTrick({state, commit, dispatch}, {trick, submission}) {
-    if (state.type === UPLOAD_TYPE.TRICK) {
-      const createdTrick = await this.$axios.$post('/api/tricks', trick)
-      submission.trickId = createdTrick.id
+  async create({state, commit, dispatch}, {form}) {
+    if (!state.uploadPromise) {
+      return
     }
-
-    await this.$axios.$post('/api/submissions', submission)
+    form.video = await state.uploadPromise
+    await dispatch('submissions/createSubmission', {form}, {root: true})
+    commit('reset')
   }
 }
