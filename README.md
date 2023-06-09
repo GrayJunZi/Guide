@@ -76,3 +76,5 @@ npx create-nuxt-app web-client
 ## 九、拆分单独的Trick页面
 
 ## 十、组件拆分
+
+## 十一、添加实体类并建立关系
