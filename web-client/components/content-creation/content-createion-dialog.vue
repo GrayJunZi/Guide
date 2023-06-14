@@ -1,5 +1,5 @@
 ﻿<template>
-  <v-dialog :value="active" persistent width="1000">
+  <v-dialog :value="active" persistent width="600">
     <template v-slot:activator="{on}">
       <v-menu offset-y>
         <template v-slot:activator="{on,attrs}">
@@ -20,7 +20,6 @@
       <component :is="component"></component>
     </div>
 
-
     <div class="d-flex justify-center my-4">
       <v-btn @click="reset">Close</v-btn>
     </div>
@@ -30,12 +29,16 @@
 import {mapState, mapMutations} from 'vuex'
 import TrickSteps from './trick-steps.vue'
 import SubmissionSteps from './submission-steps.vue'
+import CategoryForm from './category-form.vue'
+import DifficultyForm from './difficulty-form.vue'
 
 export default {
   name: 'content-creation-dialog',
   components: {
     TrickSteps,
-    SubmissionSteps
+    SubmissionSteps,
+    CategoryForm,
+    DifficultyForm
   },
   data: () => ({
     trickName: "",
@@ -47,6 +50,8 @@ export default {
       return [
         {component: TrickSteps, title: 'Trick'},
         {component: SubmissionSteps, title: 'Submission'},
+        {component: CategoryForm, title: 'Category'},
+        {component: DifficultyForm, title: 'Difficulty'},
       ]
     }
   },

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TrickingLibrary.Api.ViewModels;
 using TrickingLibrary.Data;
 using TrickingLibrary.Models;
 
@@ -17,10 +18,14 @@ public class TricksController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<Trick>> All() => await _ctx.Tricks.ToListAsync();
+    public async Task<IEnumerable<object>> All() => await _ctx.Tricks.Select(TrickViewModel.Default).ToListAsync();
 
     [HttpGet("{id}")]
-    public async Task<Trick> Get(string id) => await _ctx.Tricks.FirstOrDefaultAsync(x => x.Id.Equals(id,StringComparison.InvariantCultureIgnoreCase));
+    public async Task<object> Get(string id) =>
+        await _ctx.Tricks
+            .Where(x => x.Id.Equals(id, StringComparison.InvariantCultureIgnoreCase))
+            .Select(TrickViewModel.Default)
+            .FirstOrDefaultAsync();
 
     [HttpGet("{trickId}/submissions")]
     public async Task<IEnumerable<Submission>> GetSubmissions(string trickId) =>
@@ -28,16 +33,23 @@ public class TricksController : ControllerBase
             .ToListAsync();
 
     [HttpPost]
-    public async Task<Trick> Create([FromBody] Trick trick)
+    public async Task<object> Create([FromBody] TrickForm trickForm)
     {
-        trick.Id = trick.Name.Replace(" ", "-").ToLowerInvariant();
+        var trick = new Trick
+        {
+            Id = trickForm.Name.Replace(" ", "-").ToLowerInvariant(),
+            Name = trickForm.Name,
+            Description = trickForm.Description,
+            Difficulty = trickForm.Difficulty,
+            TrickCategories = trickForm.Categories.Select(x => new TrickCategory { CategoryId = x }).ToList()
+        };
         _ctx.Add(trick);
         await _ctx.SaveChangesAsync();
-        return trick;
+        return TrickViewModel.Default.Compile().Invoke(trick);
     }
 
     [HttpPut]
-    public async Task<Trick> Update([FromBody] Trick trick)
+    public async Task<object> Update([FromBody] Trick trick)
     {
         if (string.IsNullOrWhiteSpace(trick.Id))
         {
@@ -46,7 +58,7 @@ public class TricksController : ControllerBase
 
         _ctx.Update(trick);
         await _ctx.SaveChangesAsync();
-        return trick;
+        return TrickViewModel.Default.Compile().Invoke(trick);
     }
 
     [HttpDelete]

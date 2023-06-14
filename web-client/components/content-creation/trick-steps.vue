@@ -11,7 +11,15 @@
     <v-stepper-items>
       <v-stepper-content step="1">
         <div>
-          <v-text-field label="Tricking Name" v-model="form.name"/>
+          <v-text-field dense label="Name" v-model="form.name"/>
+          <v-text-field dense label="Description" v-model="form.description"/>
+          <v-select :items="difficultyItems" v-model="form.difficulty" label="Difficulty"/>
+          <v-select :items="trickItems" v-model="form.prerequisites" label="Prerequisites" multiple small-chips chips
+                    deletable-chips/>
+          <v-select :items="trickItems" v-model="form.progressions" label="Progressions" multiple small-chips chips
+                    deletable-chips/>
+          <v-select :items="categoryItems" v-model="form.categories" label="Categories" multiple small-chips chips
+                    deletable-chips/>
           <v-btn @click="step++">Next</v-btn>
         </div>
       </v-stepper-content>
@@ -25,21 +33,27 @@
 </template>
 
 <script>
-import {mapActions, mapMutations, mapState} from "vuex";
+import {mapActions, mapMutations, mapState, mapGetters} from "vuex";
 
 const initState = () => ({
   step: 1,
   form: {
     id: "",
     name: "",
-  }
+    description: "",
+    difficulty: "",
+    prerequisites: "",
+    progressions: "",
+    category: ""
+  },
 })
 
 export default {
   name: "trick-steps",
   data: initState,
   computed: {
-    ...mapState('video-upload', ['active'])
+    ...mapState('video-upload', ['active']),
+    ...mapGetters('tricks', ['categoryItems', 'difficultyItems', 'trickItems'])
   },
   watch: {
     'active': function (newValue) {
