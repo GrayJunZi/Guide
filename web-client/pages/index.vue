@@ -17,10 +17,6 @@ export default {
   name: 'IndexPage',
   computed: {
     ...mapState('tricks', ['tricks']),
-    ...mapState('submissions', ['submissions']),
-  },
-  async fetch(){
-    await this.$store.dispatch("tricks/fetchTricks");
   }
 }
 </script>

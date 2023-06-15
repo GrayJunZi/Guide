@@ -80,3 +80,5 @@ npx create-nuxt-app web-client
 ## 十一、添加实体类并建立关系
 
 ## 十二、表单提交
+
+## 十三、展示数据

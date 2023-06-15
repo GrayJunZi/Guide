@@ -12,6 +12,8 @@ public static class TrickViewModel
             trick.Name,
             trick.Description,
             trick.Difficulty,
-            Categories = trick.TrickCategories.Select(x => x.CategoryId)
+            Categories = trick.TrickCategories.Select(x => x.CategoryId),
+            Prerequisites = trick.Prerequisites.Select(x => x.PrerequisiteId),
+            Progressions = trick.Progressions.Select(x => x.ProgressionId),
         };
 }
