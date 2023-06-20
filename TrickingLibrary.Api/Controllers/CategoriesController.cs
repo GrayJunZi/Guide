@@ -20,13 +20,15 @@ public class CategoriesController : ControllerBase
     public async Task<IEnumerable<Category>> All() => await _ctx.Categories.ToListAsync();
 
     [HttpGet("{id}")]
-    public async Task<Category> Get(string id) => await _ctx.Categories.FirstOrDefaultAsync(x => x.Id.Equals(id,StringComparison.InvariantCultureIgnoreCase));
+    public async Task<Category> Get(string id) =>
+        await _ctx.Categories.FirstOrDefaultAsync(x => x.Id.Equals(id, StringComparison.InvariantCultureIgnoreCase));
 
     [HttpGet("{id}/tricks")]
-    public async Task<IEnumerable<TrickCategory>> ListCategoryTricks(string id) =>
+    public async Task<IEnumerable<Trick>> ListCategoryTricks(string id) =>
         await _ctx.TrickCategories
-            .Include(x=>x.Trick)
-            .Where(x => x.TrickId.Equals(id, StringComparison.InvariantCultureIgnoreCase))
+            .Include(x => x.Trick)
+            .Where(x => x.CategoryId.Equals(id, StringComparison.InvariantCultureIgnoreCase))
+            .Select(x => x.Trick)
             .ToListAsync();
 
     [HttpPost]
@@ -37,5 +39,4 @@ public class CategoriesController : ControllerBase
         await _ctx.SaveChangesAsync();
         return category;
     }
-
 }
