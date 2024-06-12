@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deep Sea Creatures</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+
+  <body>
+    <div class="outer">
+      <div class="slider">
+        <section>
+          <div class="inner">
+            <img src="fish1.png" alt="Lumifin Fish" />
+            <div class="content">
+              <h1>Lumifin</h1>
+              <p>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                Pariatur maxime deserunt repellendus similique modi, dignissimos
+                eum. Quod exercitationem officia sapiente, aliquam, et quasi
+                esse laboriosam sunt obcaecati quia consectetur magni!
+              </p>
+            </div>
+          </div>
+        </section>
+        <section>
+          <div class="inner">
+            <img src="fish2.png" alt="Lumifin Fish" />
+            <div class="content">
+              <h1>Nyxel Tentaclea</h1>
+              <p>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                Pariatur maxime deserunt repellendus similique modi, dignissimos
+                eum. Quod exercitationem officia sapiente, aliquam, et quasi
+                esse laboriosam sunt obcaecati quia consectetur magni!
+              </p>
+            </div>
+          </div>
+        </section>
+        <section>
+          <div class="inner">
+            <img src="fish3.png" alt="Lumifin Fish" />
+            <div class="content">
+              <h1>Abyssal Spirejaw</h1>
+              <p>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                Pariatur maxime deserunt repellendus similique modi, dignissimos
+                eum. Quod exercitationem officia sapiente, aliquam, et quasi
+                esse laboriosam sunt obcaecati quia consectetur magni!
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="fish-container">
+      <img src="fish4.png" alt="Animated vector fish" data-distince="80" />
+      <img src="fish4.png" alt="Animated vector fish" data-distince="200" />
+      <img src="fish4.png" alt="Animated vector fish" data-distince="20" />
+      <img src="fish4.png" alt="Animated vector fish" data-distince="300" />
+      <img src="fish4.png" alt="Animated vector fish" data-distince="100" />
+      <img src="fish4.png" alt="Animated vector fish" data-distince="90" />
+      <img src="fish4.png" alt="Animated vector fish" data-distince="220" />
+      <img src="fish4.png" alt="Animated vector fish" data-distince="350" />
+      <img src="fish4.png" alt="Animated vector fish" data-distince="260" />
+      <img src="fish4.png" alt="Animated vector fish" data-distince="480" />
+    </div>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"
+      integrity="sha512-16esztaSRplJROstbIIdwX3N97V1+pZvV33ABoG1H2OyTttBxEGkTsoIVsiP1iaTtM8b3+hu2kB6pQ4Clr5yug=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"
+      integrity="sha512-Ic9xkERjyZ1xgJ5svx3y0u3xrvfT/uPkV99LBwe68xjy/mGtO+4eURHZBW2xW4SZbFrF1Tf090XqB+EVgXnVjw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+
+    <script>
+      const slider = document.querySelector(".slider");
+      const sections = gsap.utils.toArray(".slider section");
+      const fishies = gsap.utils.toArray(".fish-container img");
+
+      let tl = gsap.timeline({
+        defaults: {
+          ease: "none",
+        },
+        scrollTrigger: {
+          trigger: slider,
+          pin: true,
+          scrub: 2,
+          end: () => "+=" + slider.offsetWidth,
+        },
+      });
+
+      tl.to(
+        slider,
+        {
+          xPercent: -66,
+        },
+        "<"
+      );
+
+      sections.forEach((stop, index) => {
+        tl.from(stop.querySelector(".content"), {
+          yPercent: -50,
+          opacity: 0,
+          scrollTrigger: {
+            trigger: stop.querySelector(".content"),
+            start: "left center",
+            end: "center center",
+            containerAnimation: tl,
+            scrub: true,
+            markers: true,
+          },
+        }).from(
+          stop.querySelector("img"),
+          {
+            xPercent: 40,
+            yPercent: -100,
+            ease: "elastic.out(1,1)",
+            scrollTrigger: {
+              trigger: stop.querySelector("img"),
+              scrub: 2,
+              containerAnimation: tl,
+            },
+          },
+          "<"
+        );
+      });
+
+      fishies.forEach((fish, i) => {
+        gsap.from(fish, {
+          xPercent: fish.dataset.distince,
+          scrollTrigger: {
+            scrub: 0.3,
+          },
+        });
+      });
+
+      // smooth scroll
+
+      const lenis = new Lenis();
+
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+
+      requestAnimationFrame(raf);
+    </script>
+  </body>
+</html>
