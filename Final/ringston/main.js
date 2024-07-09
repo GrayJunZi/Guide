@@ -194,7 +194,52 @@ const initRenderLoop = () => {
   tick();
 };
 
+const animationWords = () => {
+  const words = ["Romance", "Rings", "Relationships"];
+
+  let currentIndex = 0;
+  let split = null;
+  const textElement = document.querySelector(".primary-h1 span");
+
+  const updateText = () => {
+    textElement.textContent = words[currentIndex];
+    split = new SplitType(textElement, { type: "chars" });
+
+    animationChars(split.chars);
+    currentIndex = (currentIndex + 1) % words.length;
+  };
+
+  const animationChars = (chars) => {
+    gsap.from(chars, {
+      yPercent: 100,
+      stagger: 0.03,
+      duration: 1.5,
+      ease: "power4.out",
+      onComplete: () => {
+        if (split) {
+          split.revert();
+        }
+      },
+    });
+  };
+
+  setInterval(updateText, 3000);
+};
+
+function setupSmoothScroll() {
+  const lenis = new Lenis();
+
+  const raf = (time) => {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  };
+  requestAnimationFrame(raf);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initThreeJS();
   initRenderLoop();
+
+  animationWords();
+  setupSmoothScroll();
 });
