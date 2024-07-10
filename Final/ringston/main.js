@@ -60,6 +60,47 @@ function initThreeJS() {
       "<"
     );
 
+    function toggleWireframe(model, isWireframe, opacity) {
+      model.traverse((child) => {
+        if (child.isMesh && child.material) {
+          child.material.wireframe = isWireframe;
+          child.material.opacity = opacity;
+          child.material.transparent = true;
+        }
+      });
+    }
+
+    const contactTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: "section.contact",
+        start: "top 80%",
+        end: "bottom center",
+        scrub: true,
+        onEnter: () => {
+          toggleWireframe(ring, true, 0.1);
+          contactRotation = true;
+        },
+        onEnterBack: () => {
+          toggleWireframe(ring, true, 0.1);
+          contactRotation = true;
+        },
+        onLeave: () => {
+          toggleWireframe(ring, false, 1);
+          contactRotation = true;
+        },
+        onLeaveBack: () => {
+          toggleWireframe(ring, false, 1);
+          contactRotation = true;
+        },
+      },
+    });
+
+    contactTl.to(ring.position, {
+      z: 0.3,
+      x: 0.4,
+      y: -0.23,
+    });
+
     const directionalLight = new THREE.DirectionalLight("lightblue", 10);
     directionalLight.position.z = 8;
     scene.add(directionalLight);
@@ -323,7 +364,79 @@ function sliderSection() {
   });
 }
 
+function contactSection() {
+  gsap.set("h4, .inner-contact span", {
+    yPercent: 100,
+  });
+  gsap.set(".inner-contact p", {
+    opacity: 0,
+  });
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".inner-contact",
+      start: "-20% center",
+      end: "10% 40%",
+      scrub: true,
+    },
+  });
+
+  tl.to(".line-top, .line-bottom", {
+    width: "100%",
+  })
+    .to("h4, .inner-contact span", {
+      yPercent: 0,
+    })
+    .to(".inner-contact p", {
+      opacity: 1,
+    });
+}
+
+// Preloading
+function preloadFile(url) {
+  return new Promise((resolve, reject) => {
+    const fileType = url.split(".").pop().toLowerCase();
+    if (fileType === "jpg" || fileType === "png" || fileType === "gif") {
+      const img = new Image();
+      img.src = url;
+      img.onload = resolve;
+      img.onerror = reject;
+    } else if (fileType === "mp4" || fileType === "webm") {
+      const video = document.createElement("video");
+      video.src = url;
+      video.onloadeddata = resolve;
+      video.onerror = reject;
+    } else {
+      fetch(url)
+        .then((response) => response.blob())
+        .then(resolve)
+        .catch(reject);
+    }
+  });
+}
+
+function preloadFiles(urls) {
+  const promises = urls.map((url) => preloadFile(url));
+
+  Promise.all(promises)
+    .then(() => {
+      console.log("All files preloaded");
+
+      document.querySelector(".loading-screen").classList.add("hide-loader");
+    })
+    .catch((error) => console.error("Error preloading files:", error));
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  // Preloader
+  preloadFiles([
+    "ring.glb",
+    "images/slide1.jpg",
+    "images/slide2.jpg",
+    "images/slide3.jpg",
+    "video.mp4",
+  ]);
+
   initThreeJS();
   initRenderLoop();
 
@@ -332,4 +445,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   inspectionSection();
   sliderSection();
+  contactSection();
 });
