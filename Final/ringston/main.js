@@ -265,6 +265,61 @@ function inspectionSection() {
       scrub: true,
     },
     x: 200,
+    y: -50,
+  });
+}
+
+function sliderSection() {
+  let mm = gsap.matchMedia();
+
+  mm.add("(min-width: 768px)", () => {
+    let slider = document.querySelector(".slider");
+    let sliderSection = gsap.utils.toArray(".slide");
+
+    let tl = gsap.timeline({
+      defaults: {
+        ease: "none",
+      },
+      scrollTrigger: {
+        trigger: slider,
+        pin: true,
+        scrub: 1,
+        end: () => "+=" + slider.offsetWidth,
+      },
+    });
+
+    tl.to(
+      slider,
+      {
+        xPercent: -66,
+      },
+      "<"
+    ).to(
+      ".progress",
+      {
+        width: "100%",
+      },
+      "<"
+    );
+
+    sliderSection.forEach((stop, index) => {
+      const slideText = new SplitType(stop.querySelector(".slide-p"), {
+        types: "chars",
+      });
+
+      tl.from(slideText.chars, {
+        opacity: 0,
+        y: 10,
+        stagger: 0.03,
+        scrollTrigger: {
+          trigger: stop.querySelector(".slide-p"),
+          start: "top bottom",
+          end: "bottom center",
+          containerAnimation: tl,
+          scrub: true,
+        },
+      });
+    });
   });
 }
 
@@ -276,4 +331,5 @@ document.addEventListener("DOMContentLoaded", () => {
   setupSmoothScroll();
 
   inspectionSection();
+  sliderSection();
 });
